@@ -1,0 +1,20 @@
+/* Elements */
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* IDs */
+#h1{
+    font-family: 'Open Sans', sans-serif;
+}
+#filters-container{
+    margin-top: 20px;
+}
+#teams-container{
+    margin-top: 40px;
+}
+
+/* Classes */
+.btn-team{
+    margin-top: 20px;
+}
