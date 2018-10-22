@@ -38,7 +38,7 @@ $(document).ready(function(){
             var matches = data.matches;
             $('#tbody').html('');
             $('.modal-title').html('');
-            $('.modal-title').append(teamName + ' Schedule');
+            $('.modal-title').append(teamName + ' Calendar');
             $.each(matches, function(index, match){
                 if (match.homeTeam.name == teamName) {
                     $('#tbody').append('<tr><th>'+index+'</th><td>'+match.awayTeam.name+'</td><td>'+match.utcDate+'</td><td>'+match.status+'</td></tr>');
