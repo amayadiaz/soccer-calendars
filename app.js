@@ -1,32 +1,46 @@
+
+// LOADER <div class="lds-ripple"><div></div><div></div></div>
+
 $(document).ready(function(){
 
+    $('#select-league').on('change', function(){
+        var teamSelectedId = $('#select-league').val();
+        callTeams(teamSelectedId);  
+   });
+
     $('#btnSearch').on('click', function(){
-         var teamSelectedId = $('#select-teams').val();
-         callTeams(teamSelectedId);  
+         var teamSelectedId = $('#select-team').val();
+         var teamName = $('#select-team option:selected').text();
+         callTeam(teamSelectedId, teamName);  
     });
 
-    $('#teams-list').on('click', '.btn-team', function(){
-        var teamId = $(this).attr('id');
-        var teamName = $(this).text();
-        callTeam(teamId, teamName);  
+    $('#myTable').DataTable({
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "pagingType": "full_numbers",
+        "order": [[ 3, "desc" ]]
     });
 
 });
 
  function callTeams(teamSelectedId){
-    $('#teams-list').html('');
-     $.ajax({
-         url: "http://api.football-data.org/v2/competitions/"+teamSelectedId+"/teams",
-         type: "GET",
-         beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
-         success: function(data) { 
-             
-             var teams = data.teams;
-             $.each(teams, function(index, team){
-                 $('#teams-list').append('<div class="col-md-3"><button id='+team.id+' type="button" class="btn btn-primary btn-team" data-toggle="modal" data-target="#exampleModal">'+team.name+'</button></div>');
-             });
-         }
-     });
+
+    $('#select-team').html('');
+
+    $.ajax({
+        url: "http://api.football-data.org/v2/competitions/"+teamSelectedId+"/teams",
+        type: "GET",
+        beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
+        success: function(data) { 
+            
+            var teams = data.teams;
+            $.each(teams, function(index, team){
+                $('#select-team').append('<option value="'+team.id+'">'+team.name+'</option>');
+            });
+            $('#select-team').selectpicker('refresh');
+
+        }
+    });
+ 
  }
  
  function callTeam(teamId, teamName){
@@ -36,14 +50,14 @@ $(document).ready(function(){
          beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
          success: function(data) { 
             var matches = data.matches;
+            console.log(matches);
             $('#tbody').html('');
-            $('.modal-title').html('');
-            $('.modal-title').append(teamName + ' Calendar');
             $.each(matches, function(index, match){
+                var date = moment(match.utcDate).format('DD-MM-YYYY, h:mm A');
                 if (match.homeTeam.name == teamName) {
-                    $('#tbody').append('<tr><th>'+index+'</th><td>'+match.awayTeam.name+'</td><td>'+match.utcDate+'</td><td>'+match.status+'</td></tr>');
+                    $('#tbody').append('<tr><td>'+index+'</td><td>'+match.awayTeam.name+'</td><td>'+date+'</td><td>'+match.status+'</td><td>'+match.competition.name+'</td></tr>');
                 }else{
-                    $('#tbody').append('<tr><th>'+index+'</th><td>'+match.homeTeam.name+'</td><td>'+match.utcDate+'</td><td>'+match.status+'</td></tr>');
+                    $('#tbody').append('<tr><td>'+index+'</td><td>'+match.homeTeam.name+'</td><td>'+date+'</td><td>'+match.status+'</td><td>'+match.competition.name+'</td></tr>');
                 }
             });
              
