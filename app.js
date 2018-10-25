@@ -3,7 +3,20 @@
 
 $(document).ready(function(){
 
-    $('#select-league').on('change', function(){
+    var myTable;
+
+    var columnsTable = [{
+        title: "Name"
+        }, {
+        title: "Date"
+        }, {
+        title: "Status"
+        }, {
+        title: "Competition"
+        }
+    ];
+
+   $('#select-league').on('change', function(){
         var teamSelectedId = $('#select-league').val();
         callTeams(teamSelectedId);  
    });
@@ -11,13 +24,12 @@ $(document).ready(function(){
     $('#btnSearch').on('click', function(){
          var teamSelectedId = $('#select-team').val();
          var teamName = $('#select-team option:selected').text();
-         callTeam(teamSelectedId, teamName);  
-    });
-
-    $('#myTable').DataTable({
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        "pagingType": "full_numbers",
-        "order": [[ 3, "desc" ]]
+         jsonData = callTeam(teamSelectedId, teamName); 
+         console.log(jsonData);
+         myTable = $('#myTable').DataTable({
+             data: jsonData,
+             columns: columnsTable
+         });
     });
 
 });
@@ -44,26 +56,44 @@ $(document).ready(function(){
  }
  
  function callTeam(teamId, teamName){
+    var json = [];
      $.ajax({
          url: "http://api.football-data.org//v2/teams/"+teamId+"/matches/",
          type: "GET",
          beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
          success: function(data) { 
-            var matches = data.matches;
-            console.log(matches);
+            
+            var dataAjax = data.matches;
             $('#tbody').html('');
-            $.each(matches, function(index, match){
+            $.each(dataAjax, function(index, match){
+
                 var date = moment(match.utcDate).format('DD-MM-YYYY, h:mm A');
+
                 if (match.homeTeam.name == teamName) {
-                    $('#tbody').append('<tr><td>'+index+'</td><td>'+match.awayTeam.name+'</td><td>'+date+'</td><td>'+match.status+'</td><td>'+match.competition.name+'</td></tr>');
+                    var item = {};
+                    item["name"] = match.awayTeam.name;
+                    item["status"] = match.status;
+                    item["date"] = date;
+                    item["competition"] = match.competition.name;
                 }else{
-                    $('#tbody').append('<tr><td>'+index+'</td><td>'+match.homeTeam.name+'</td><td>'+date+'</td><td>'+match.status+'</td><td>'+match.competition.name+'</td></tr>');
+                    var item = {};
+                    item["name"]  = match.homeTeam.name;
+                    item["status"] = match.status;
+                    item["date"] = date;
+                    item["competition"] = match.competition.name;
                 }
+
+                json.push(item);
+
             });
-             
+            
          }
      });
+     
+     return json;
  }
+
+
  
  
  
