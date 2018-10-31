@@ -18,6 +18,8 @@ $(document).ready(function(){
          callTeam(teamSelectedId, teamName); 
     });
 
+    
+
 });
 
  function callTeams(teamSelectedId){
@@ -54,19 +56,24 @@ $(document).ready(function(){
 
             var matches = data.matches;
 
+            console.log(matches);
+            
+
 
             $.each(matches, function(index, match){
 
 
                 var date = moment(match.utcDate).format('DD-MM-YYYY, h:mm A');
+                var score = match.score.fullTime.homeTeam + " - " + match.score.fullTime.awayTeam;
 
                 if (match.homeTeam.name == teamName) {
                     
-                    $('#myTable').dataTable().fnAddData( [match.awayTeam.name, date, match.status, match.competition.name] );
+                    $('#myTable').dataTable().fnAddData( [match.awayTeam.name, date, match.status, match.competition.name, 'L', score] );
                    
                 }else{
 
-                    $('#myTable').dataTable().fnAddData( [match.homeTeam.name, date, match.status, match.competition.name] );
+                    $('#myTable').dataTable().fnAddData( [match.homeTeam.name, date, match.status, match.competition.name, 'V', score] );
+                    
                 }
 
             });

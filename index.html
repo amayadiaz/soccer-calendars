@@ -22,6 +22,7 @@
 
     <div id="filters-container" class="text-center">
         <select id="select-league" class="selectpicker" data-live-search="true">
+            <option value="" selected disabled>Please select a League</option>
             <option value="2002">Bundesliga - Germany</option>
             <option value="2003">Eredivisie - Netherlands</option>
             <option value="2014">La Liga - Spain</option>
@@ -36,7 +37,7 @@
     </div>
 
     <div id="teams-container" class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div id="teams-list" class="row">
                 <table id="myTable" class="display" style="width:100%">
                     <thead>
@@ -45,6 +46,8 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Competition</th>
+                            <th>Condition</th>
+                            <th>Result</th>
                         </tr>
                     </thead>
                 </table>
