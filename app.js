@@ -5,6 +5,15 @@ $(document).ready(function(){
 
    $('#myTable').DataTable({
        "ordering" : false,
+       "columns": [
+        { "width": "20%" },
+        { "width": "20%" },
+        null,
+        null,
+        { "width": "5%" },
+        { "width": "5%" },
+      ],
+      "responsive": true,
    });
 
    $('#select-league').on('change', function(){
@@ -12,7 +21,7 @@ $(document).ready(function(){
         callTeams(teamSelectedId);  
    });
 
-    $('#btnSearch').on('click', function(){
+    $('#btn-search').on('click', function(){
          var teamSelectedId = $('#select-team').val();
          var teamName = $('#select-team option:selected').text();
          callTeam(teamSelectedId, teamName); 
@@ -64,6 +73,10 @@ $(document).ready(function(){
 
 
                 var date = moment(match.utcDate).format('DD-MM-YYYY, h:mm A');
+                if(match.score.fullTime.homeTeam==null && match.score.fullTime.awayTeam==null){
+                    match.score.fullTime.homeTeam = 0;
+                    match.score.fullTime.awayTeam = 0;
+                }
                 var score = match.score.fullTime.homeTeam + " - " + match.score.fullTime.awayTeam;
 
                 if (match.homeTeam.name == teamName) {
