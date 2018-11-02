@@ -36,7 +36,7 @@ $(document).ready(function(){
     $('#select-team').html('');
 
     $.ajax({
-        url: "http://api.football-data.org/v2/competitions/"+teamSelectedId+"/teams",
+        url: "https://api.football-data.org/v2/competitions/"+teamSelectedId+"/teams",
         type: "GET",
         beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
         success: function(data) { 
@@ -55,7 +55,7 @@ $(document).ready(function(){
  function callTeam(teamId, teamName){
     
      $.ajax({
-         url: "http://api.football-data.org//v2/teams/"+teamId+"/matches/",
+         url: "https://api.football-data.org//v2/teams/"+teamId+"/matches/",
          type: "GET",
          beforeSend: function(xhr){xhr.setRequestHeader('X-Auth-Token', '9273f2c112b641c997a94f444da1f51c');},
          success: function(data) { 
